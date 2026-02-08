@@ -8,7 +8,7 @@ import { fetchHygraphQuery } from './utils/fetch-hygraph-query'
 const getPageData = async (): Promise<HomePageData> => {
   const query = `
     query PageInfoQuery {
-      page(where: {slug: "home"}) {
+      page(where: { slug: "home" }) {
         introduction {
           raw
         }
@@ -54,16 +54,40 @@ const getPageData = async (): Promise<HomePageData> => {
       }
     }
   `
+
+  // 🔥 Use revalidate in production, no-store in dev
   return fetchHygraphQuery(query, 150)
 }
 
 export default async function Home() {
-  const { page: pageData, workExperiences } = await getPageData()
+  const data = await getPageData()
+  console.log('HOME PAGE DATA:', JSON.stringify(data, null, 2))
+
+  // ✅ SAFE destructuring
+  const pageData = data?.page
+  const workExperiences = data?.workExperiences ?? []
+
+  // ✅ Extra safety (prevents 500 crash)
+  if (!pageData) {
+    return (
+      <main className="container py-20">
+        <h1 className="text-xl font-semibold">
+          Home page content not found in Hygraph
+        </h1>
+      </main>
+    )
+  }
+
   return (
     <>
       <HeroSection homeInfo={pageData} />
-      <KnownTechs techs={pageData.knownTechs} />
-      <HighlightedProjects projects={pageData.highlightProjects} />
+
+      <KnownTechs techs={pageData.knownTechs ?? []} />
+
+      <HighlightedProjects
+        projects={pageData.highlightProjects ?? []}
+      />
+
       <WorksExperience experiences={workExperiences} />
     </>
   )

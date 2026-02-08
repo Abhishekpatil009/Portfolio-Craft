@@ -1,20 +1,26 @@
-export const fetchHygraphQuery = async <T>(
+export async function fetchHygraphQuery(
   query: string,
   revalidate?: number
-): Promise<T> => {
-  const response = await fetch(process.env.HYGRAPH_URL!, {
+) {
+  const res = await fetch(process.env.HYGRAPH_URL!, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Accept: 'application/json',
-      Authorization: `Bearer ${process.env.HYGRAPH_TOKEN}`
+      Authorization: `Bearer ${process.env.HYGRAPH_TOKEN}`,
     },
     body: JSON.stringify({ query }),
-    next: {
-      revalidate // ... Query Cache Hours
-    }
+
+    // ✅ Dev-friendly + safe
+    cache: revalidate ? 'force-cache' : 'no-store',
+    next: revalidate ? { revalidate } : undefined,
   })
 
-  const { data } = await response.json()
-  return data
+  if (!res.ok) {
+    throw new Error('Failed to fetch Hygraph data')
+  }
+
+  const json = await res.json()
+
+  // ✅ THIS WAS THE ROOT CAUSE
+  return json.data
 }

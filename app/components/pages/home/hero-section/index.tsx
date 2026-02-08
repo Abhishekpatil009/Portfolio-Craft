@@ -31,7 +31,7 @@ export const HeroSection = ({ homeInfo }: HeroSectionProps) => {
           transition={{ duration: 0.5 }}
         >
           <p className='font-mono text-emerald-400'>Hello, my name is</p>
-          <h2 className='text-4xl font-medium mt-2'>Kumar Gaurav Govinda</h2>
+          <h2 className='text-4xl font-medium mt-2'>Abhihshek Patil</h2>
           <div className='text-gray-400 my-6 text-sm sm:text-base'>
             <RichText content={homeInfo.introduction.raw} />
           </div>
