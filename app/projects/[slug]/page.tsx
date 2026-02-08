@@ -1,8 +1,11 @@
+import { Metadata } from 'next'
 import { ProjectDetails } from '@/app/components/pages/project/project-details'
 import { ProjectSections } from '@/app/components/pages/project/project-sections'
-import { ProjectPageData, ProjectsPageStaticData } from '@/app/types/page-info'
+import {
+  ProjectPageData,
+  ProjectsPageStaticData
+} from '@/app/types/page-info'
 import { fetchHygraphQuery } from '@/app/utils/fetch-hygraph-query'
-import { Metadata } from 'next'
 
 type ProjectProps = {
   params: {
@@ -10,10 +13,15 @@ type ProjectProps = {
   }
 }
 
-const getProjectDetails = async (slug: string): Promise<ProjectPageData> => {
+/* -------------------------------------------
+   Fetch single project (ISR enabled)
+-------------------------------------------- */
+const getProjectDetails = async (
+  slug: string
+): Promise<ProjectPageData> => {
   const query = `
-    query ProjectQuery() {
-      project(where: {slug: "${slug}"}) {
+    query ProjectQuery {
+      project(where: { slug: "${slug}" }) {
         pageThumbnail {
           url
         }
@@ -41,15 +49,19 @@ const getProjectDetails = async (slug: string): Promise<ProjectPageData> => {
     }
   `
 
-  return fetchHygraphQuery(query, 150)
+  // ✅ GENERIC + ISR
+  return fetchHygraphQuery<ProjectPageData>(query, 150)
 }
 
-export default async function Project({ params: { slug } }: ProjectProps) {
+/* -------------------------------------------
+   Page
+-------------------------------------------- */
+export default async function Project({
+  params: { slug }
+}: ProjectProps) {
   const { project } = await getProjectDetails(slug)
 
-  if (!project) {
-    return null;
-  }
+  if (!project) return null
 
   return (
     <>
@@ -59,25 +71,34 @@ export default async function Project({ params: { slug } }: ProjectProps) {
   )
 }
 
+/* -------------------------------------------
+   Static Params (SSG)
+-------------------------------------------- */
 export async function generateStaticParams() {
   const query = `
-    query ProjectsSlugsQuery() {
+    query ProjectsSlugsQuery {
       projects(first: 100) {
         slug
       }
     }
   `
 
-  const { projects } = await fetchHygraphQuery<ProjectsPageStaticData>(query)
+  const { projects } =
+    await fetchHygraphQuery<ProjectsPageStaticData>(query)
 
-  return projects
+  // ✅ REQUIRED SHAPE FOR NEXT.JS
+  return projects.map(project => ({
+    slug: project.slug
+  }))
 }
 
+/* -------------------------------------------
+   SEO Metadata
+-------------------------------------------- */
 export async function generateMetadata({
   params: { slug }
 }: ProjectProps): Promise<Metadata> {
-  const data = await getProjectDetails(slug)
-  const project = data.project
+  const { project } = await getProjectDetails(slug)
 
   return {
     title: project.title,

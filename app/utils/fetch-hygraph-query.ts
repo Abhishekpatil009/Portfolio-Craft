@@ -1,7 +1,7 @@
-export async function fetchHygraphQuery(
+export async function fetchHygraphQuery<T>(
   query: string,
   revalidate?: number
-) {
+): Promise<T> {
   const res = await fetch(process.env.HYGRAPH_URL!, {
     method: 'POST',
     headers: {
@@ -21,6 +21,6 @@ export async function fetchHygraphQuery(
 
   const json = await res.json()
 
-  // ✅ THIS WAS THE ROOT CAUSE
-  return json.data
+  // ✅ Typed return
+  return json.data as T
 }
