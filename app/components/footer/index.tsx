@@ -7,7 +7,7 @@ export const Footer = () => {
         Made with
         <IoMdHeart size={13} className="text-emerald-500" />
         by
-        <strong className="font-medium">Gaurav Govinda</strong>
+        <strong className="font-medium">Abhishek Patil</strong>
       </span>
     </footer>
   )
