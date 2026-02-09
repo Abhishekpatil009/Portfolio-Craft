@@ -5,10 +5,13 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { NavItem } from './nav-item'
 import { motion } from 'framer-motion'
-
 const NAV_ITEMS = [
   { label: 'Home', href: '/' },
-  { label: 'Github', href: 'https://github.com/Abhishekpatil009/', external: true },
+  {
+    label: 'Github',
+    href: 'https://github.com/Abhishekpatil009/',
+    external: true
+  },
   { label: 'Projects', href: '/projects' },
   { label: 'Skill', href: '/#skills' },
   { label: 'Experience', href: '/#experiences' },
@@ -16,7 +19,8 @@ const NAV_ITEMS = [
   {
     label: 'Resume',
     href: '/resume/2025ResumeVNA.pdf',
-    external: true
+    external: true,
+    download: true
   }
 ]
 
@@ -84,3 +88,6 @@ export const Header = () => {
     </motion.header>
   )
 }
+
+
+

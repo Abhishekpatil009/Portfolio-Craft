@@ -3,45 +3,65 @@
 import { cn } from '@/app/lib/utils'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { HiDownload } from 'react-icons/hi'
 
 type NavItemProps = {
   label: string
   href: string
   external?: boolean
+  download?: boolean
   onClick?: () => void
 }
 
-export const NavItem = ({ label, href, external, onClick }: NavItemProps) => {
+export const NavItem = ({
+  label,
+  href,
+  external,
+  download,
+  onClick
+}: NavItemProps) => {
   const pathname = usePathname()
-
-  // Active state only for internal links
   const isActive = !external && pathname === href
 
-  // 🔹 External link (Resume, GitHub)
+  // 🔹 External links (Resume / GitHub)
   if (external) {
     return (
-      <a
-        href={href}
-        target="_blank"
-        rel="noopener noreferrer"
-        onClick={onClick}
-        className={cn(
-          'text-gray-400 flex items-center gap-2 font-medium font-mono hover:text-gray-50 transition'
+      <div className="flex items-center gap-2">
+        {/* Preview link */}
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={onClick}
+          className="text-gray-400 hover:text-gray-50 transition flex items-center gap-2 font-medium font-mono"
+        >
+          <span className="text-emerald-400">#</span>
+          {label}
+        </a>
+
+        {/* Download icon */}
+        {download && (
+          <a
+            href={href}
+            download
+            className="text-gray-400 hover:text-emerald-400 transition"
+            title="Download Resume"
+            onClick={onClick}
+          >
+            <HiDownload size={16} />
+          </a>
         )}
-      >
-        <span className="text-emerald-400">#</span>
-        {label}
-      </a>
+      </div>
     )
   }
 
-  // 🔹 Internal link
+  // 🔹 Internal links
   return (
     <Link
       href={href}
       onClick={onClick}
       className={cn(
-        'text-gray-400 flex items-center gap-2 font-medium font-mono hover:text-gray-50 transition',
+        'text-gray-400 hover:text-gray-50 transition flex items-center gap-2 font-medium font-mono',
         isActive && 'text-gray-50'
       )}
     >
