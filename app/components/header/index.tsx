@@ -7,49 +7,41 @@ import { NavItem } from './nav-item'
 import { motion } from 'framer-motion'
 
 const NAV_ITEMS = [
-  {
-    label: 'Home',
-    href: '/'
-  },
-  {
-    label: 'Github',
-    href: 'https://github.com/Abhishekpatil009/'
-  },
-  {
-    label: 'Projects',
-    href: '/projects'
-  },
-  {
-    label: 'Skill',
-    href: '/#skills'
-  },
-  {
-    label: 'Experience',
-    href: '/#experiences'
-  },
-  {
-    label: 'Contact',
-    href: '/#contact'
-  }
+  { label: 'Home', href: '/' },
+  { label: 'Github', href: 'https://github.com/Abhishekpatil009/' },
+  { label: 'Projects', href: '/projects' },
+  { label: 'Skill', href: '/#skills' },
+  { label: 'Experience', href: '/#experiences' },
+  { label: 'Contact', href: '/#contact' }
 ]
 
 export const Header = () => {
   const [isOpen, setIsOpen] = useState(false)
+
+  // This hex code (#020617) corresponds to Slate-950.
+  // It is a very dark navy that usually matches these types of logo exports.
+  // If the logo block is still visible, try changing this to #000000 (Black) or #111827 (Gray-900).
+  const headerBgColor = 'bg-[#020617]' 
 
   return (
     <motion.header
       initial={{ top: -100 }}
       animate={{ top: 0 }}
       transition={{ duration: 0.5 }}
-      className='fixed top-0 w-full z-10 h-24 flex items-center justify-center bg-gray-900 bg-opacity-95 backdrop-blur-sm'
+      // Apply the matching dark background
+      className={`fixed top-0 w-full z-10 h-24 flex items-center justify-center ${headerBgColor} bg-opacity-95 backdrop-blur-sm`}
     >
       <div className='container flex items-center justify-between'>
         <Link href='/'>
           <Image
             width={100}
             height={100}
-            src='/images/KGG.png'
-            alt='Logo Gaurav Govinda'
+            src='/images/abhi2.png'
+            alt='Logo Abhishek Patil'
+            // REMOVED: 'invert' and 'mix-blend-screen' are removed because 
+            // the logo is already the correct color. 
+            // 'object-contain' ensures it doesn't stretch.
+            className='object-contain'
           />
         </Link>
 
@@ -79,7 +71,8 @@ export const Header = () => {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className='absolute top-24 left-0 w-full bg-gray-900 bg-opacity-95 md:hidden'
+            // Ensure mobile menu matches the header background
+            className={`absolute top-24 left-0 w-full ${headerBgColor} bg-opacity-95 md:hidden`}
           >
             <div className='container py-4'>
               <div className='flex flex-col gap-4'>
