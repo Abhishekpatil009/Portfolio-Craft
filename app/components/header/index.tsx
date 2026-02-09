@@ -12,8 +12,8 @@ const NAV_ITEMS = [
     href: '/'
   },
   {
-    label: 'Blog',
-    href: 'https://gauravblog.vercel.app'
+    label: 'Github',
+    href: 'https://github.com/Abhishekpatil009/'
   },
   {
     label: 'Projects',

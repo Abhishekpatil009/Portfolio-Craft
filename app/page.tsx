@@ -61,7 +61,6 @@ const getPageData = async (): Promise<HomePageData> => {
 
 export default async function Home() {
   const data = await getPageData()
-  console.log('HOME PAGE DATA:', JSON.stringify(data, null, 2))
 
   // ✅ SAFE destructuring
   const pageData = data?.page
